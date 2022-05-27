@@ -2,7 +2,7 @@ name: Django CI
 
 on:
   push:
-    branches: [ developer, frontend ]
+    branches: [ developer ]
   pull_request:
     branches: [ developer ]
 
