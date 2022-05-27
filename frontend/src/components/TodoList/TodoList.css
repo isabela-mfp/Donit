@@ -1,0 +1,16 @@
+.todo-list {
+    max-width: 480px;
+    width: 100%;
+}
+
+.button-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.form-last-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
