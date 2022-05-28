@@ -11,9 +11,9 @@ const getTodoListMock = () => ({
 jest.mock('../../services/todoList.js', () => ({
   __esModule: true,
   default: () => ({
-    getTodoList: getTodoListMock,
+    getTodoListItems: getTodoListMock,
   }),
-  getTodoList: getTodoListMock,
+  getTodoListItems: getTodoListMock,
 }));
 
 describe('<TodoList />', () => {
