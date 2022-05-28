@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles,
+  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles, CardActions,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff, Mail } from '@material-ui/icons';
 import { isValidEmail } from '../../utils/validators';
+import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles(() => ({
   flexCenter: {
@@ -23,17 +24,27 @@ function LoginForm() {
   const [hidePassword, setHidePassword] = useState(true);
   const [emailState, setEmail] = useState('');
   const [passwordState, setPassword] = useState('');
+  const { login, user } = useAuth();
   const navigate = useNavigate();
+
+  if (user) {
+    navigate('/panel');
+  }
 
   const showPassword = () => {
     setHidePassword(!hidePassword);
   };
 
-  const submitLogin = (ev) => {
+  const isValid = () => isValidEmail(emailState);
+
+  const submitLogin = async (ev) => {
     ev.preventDefault();
     const email = ev.target.email.value;
     const password = ev.target.password.value;
-    console.log(email, password);
+    const userLogin = await login(email, password);
+    if (userLogin) {
+      navigate('/panel');
+    }
   };
 
   const updatePassword = (ev) => {
@@ -44,14 +55,12 @@ function LoginForm() {
     setEmail(ev.target.value);
   };
 
-  const isValid = () => isValidEmail(emailState);
-
   const goToRegister = () => navigate('/register');
 
   return (
-    <div data-testid="RegisterForm" className={classes.flexCenter}>
+    <div data-testid="LoginForm" className={classes.flexCenter}>
       <form
-        onSubmit={console.log}
+        onSubmit={submitLogin}
       >
         <div>
           <FormControl margin="normal">
@@ -94,25 +103,23 @@ function LoginForm() {
             />
           </FormControl>
         </div>
-        <div>
+        <CardActions>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={goToRegister}
+          >
+            Register
+          </Button>
           <Button
             disabled={!isValid()}
             fullWidth
             variant="outlined"
             type="submit"
-            onClick={submitLogin}
           >
             Login
           </Button>
-          <Button
-            fullWidth
-            variant="outlined"
-            type="submit"
-            onClick={goToRegister}
-          >
-            Register
-          </Button>
-        </div>
+        </CardActions>
       </form>
     </div>
   );

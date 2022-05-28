@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles,
+  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles, CardActions,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff, Mail } from '@material-ui/icons';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { isPasswordValid, isValidEmail } from '../../utils/validators';
+import { register } from '../../services/userService';
 
 // import PropTypes from 'prop-types';
 
@@ -25,21 +28,32 @@ function RegisterForm() {
   const [emailState, setEmail] = useState('');
   const [passwordState, setPassword] = useState('');
   const [passwordConfirmationState, setPasswordConfirmation] = useState('');
+  const navigate = useNavigate();
 
   const showPassword = () => {
     setHidePassword(!hidePassword);
   };
 
-  const submitRegistration = (ev) => {
-    ev.preventDefault();
-    const email = ev.target.email.value;
-    const password = ev.target.password.value;
-    const passwordConfirmation = ev.target.passwordConfirmation.value;
-    console.log(email, password, passwordConfirmation);
-  };
-
   const isValid = () => isPasswordValid(passwordState)
     && passwordState === passwordConfirmationState && isValidEmail(emailState);
+
+  const goToLogin = () => {
+    navigate('/');
+  };
+
+  const submitRegistration = async (ev) => {
+    ev.preventDefault();
+    if (!isValid()) {
+      return;
+    }
+    const name = ev.target.name.value;
+    const email = ev.target.email.value;
+    const password = ev.target.password.value;
+    const result = await register(name, email, password);
+    if (result) {
+      goToLogin();
+    }
+  };
 
   const updatePassword = (ev) => {
     setPassword(ev.target.value);
@@ -56,8 +70,23 @@ function RegisterForm() {
   return (
     <div data-testid="RegisterForm" className={classes.flexCenter}>
       <form
-        onSubmit={console.log}
+        onSubmit={submitRegistration}
       >
+        <div>
+          <FormControl margin="normal">
+            <InputLabel htmlFor="name">Name</InputLabel>
+            <Input
+              name="name"
+              endAdornment={(
+                <InputAdornment position="end">
+                  <IconButton>
+                    <AccountCircleIcon />
+                  </IconButton>
+                </InputAdornment>
+              )}
+            />
+          </FormControl>
+        </div>
         <div>
           <FormControl margin="normal">
             <InputLabel htmlFor="email">E-mail</InputLabel>
@@ -121,17 +150,23 @@ function RegisterForm() {
             />
           </FormControl>
         </div>
-        <div>
+        <CardActions>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={goToLogin}
+          >
+            Return
+          </Button>
           <Button
             disabled={!isValid()}
             fullWidth
             variant="outlined"
             type="submit"
-            onClick={submitRegistration}
           >
             Register
           </Button>
-        </div>
+        </CardActions>
       </form>
     </div>
   );
