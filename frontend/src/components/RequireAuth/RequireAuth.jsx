@@ -6,8 +6,6 @@ import useAuth from '../../hooks/useAuth';
 function RequireAuth({ children }) {
   const algo = useAuth();
   const { authed } = algo;
-  // eslint-disable-next-line
-  debugger;
   return authed !== null ? children : <Navigate to="/" replace />;
 }
 

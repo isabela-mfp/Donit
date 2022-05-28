@@ -6,20 +6,21 @@ import moment from 'moment';
 const getParsedDb = () => JSON.parse(localStorage.getItem('database'));
 const saveDb = (db) => localStorage.setItem('database', JSON.stringify(db));
 
-export const getAllTodoLists = () => {
+const getDateFromString = (dateString) => (dateString ? moment(dateString).toDate() : null);
+
+export const getAllTodoLists = (user) => {
   const db = getParsedDb();
+  console.log(user);
   return new Promise((resolve) => {
-    resolve(db.map((el) => el.id));
+    resolve(db.todoLists?.map((el) => ({ ...el, items: null })));
   });
 };
 
-const getDateFromString = (dateString) => (dateString ? moment(dateString).toDate() : null);
-
-export const getTodoList = (id) => {
+export const getTodoListItems = (id) => {
   const { todoLists } = getParsedDb();
   return new Promise((resolve) => {
     const todoList = todoLists.filter((el) => el.id === id)[0];
-    const { items } = todoList;
+    const { items } = todoList || { items: [] };
     const mappedItems = items.map((el) => ({
       ...el,
       dueDate: getDateFromString(el.dueDate),
@@ -30,6 +31,17 @@ export const getTodoList = (id) => {
       items: mappedItems,
     });
   });
+};
+
+export const createTodoList = (name, description) => {
+  const db = getParsedDb();
+  db.todoLists.push({
+    id: db.todoLists.length + 1,
+    name,
+    description,
+    items: [],
+  });
+  saveDb(db);
 };
 
 export const updateTodoListItem = (todoListId, itemId) => {
@@ -60,7 +72,8 @@ export const createTodoItem = (todoListId, todoItem) => {
 
 export default {
   getAllTodoLists,
-  getTodoListItems: getTodoList,
+  createTodoList,
+  getTodoListItems,
   deleteTodoListItem,
   updateTodoListItem,
   createTodoItem,

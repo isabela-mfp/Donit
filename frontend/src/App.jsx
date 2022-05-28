@@ -8,11 +8,11 @@ import {
 import Home from './components/Home/Home';
 import { AuthProvider } from './hooks/useAuth';
 import RequireAuth from './components/RequireAuth/RequireAuth';
-import TodoList from './components/TodoList/TodoList';
+import TodoListPanel from './components/TodoListPanel/TodoListPanel';
 
 function App() {
   const panel = (
-    <RequireAuth><TodoList /></RequireAuth>);
+    <RequireAuth><TodoListPanel /></RequireAuth>);
   return (
     <AuthProvider>
       <Router>
