@@ -1,0 +1,31 @@
+<html> 
+    <head>
+        <title>Lista To-Do</title>
+    </head>
+    <body>
+      <h1>Iniciar nova lista</h1>
+      
+      <form method="POST" action="/app/new_list" id="new_list">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="description">Descriçao:</label>
+        <input type="text" id="description" name="description">
+        <label for="type">Tipo:</label>
+        <input type="text" id="type" name="type">
+        </form>
+        <button type="submit" form="new_list" value="Submit">Submit</button> 
+      
+      <form method="POST" action="/app/new_task" id="new_t">
+        <input type="text" id="name" name="name"><br><br>
+        <input type="text" id="description" name="description">
+        <input type="text" id="conclusion" name="conclusion">
+        <input type="text" id="priority" name="priority"><br><br>
+        <input type="text" id="status" name="status">
+        </form>
+        <button type="submit" form="new_t" value="Submit">Submit</button> 
+        
+        
+        {% csrf_token %}
+      </form>
+    </body>
+</html>

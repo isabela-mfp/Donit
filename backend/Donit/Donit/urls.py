@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import include
-from django.urls import path
+from django.urls import path, re_path
+from app import views
+
 
 urlpatterns = [
+    re_path(r'^$', views.home_page, name='home'),
+    re_path(r'^app/new_list$', views.new_list, name='new_list'),
+    re_path(r'^app/del_list$', views.del_list, name='del_list'),
+    re_path(r'^app/(\d+)/new_task$', views.new_task, name='new_task'),
+    re_path(r'^app/(\d+)/del_task$', views.del_task, name='del_task'),
     path('admin/', admin.site.urls),
     path('/', include('app.urls')),
 ]
