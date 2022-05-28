@@ -1,9 +1,11 @@
 import moment from 'moment';
-// import database from '../data/todolist';
-
-// localStorage.setItem('database', JSON.stringify(database));
+import database from '../data/todolist';
 
 const getParsedDb = () => JSON.parse(localStorage.getItem('database'));
+
+if (!getParsedDb()) {
+  localStorage.setItem('database', JSON.stringify(database));
+}
 const saveDb = (db) => localStorage.setItem('database', JSON.stringify(db));
 
 const getDateFromString = (dateString) => (dateString ? moment(dateString).toDate() : null);

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles, CardActions,
 } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { Visibility, VisibilityOff, Mail } from '@material-ui/icons';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { isPasswordValid, isValidEmail } from '../../utils/validators';
@@ -18,7 +19,7 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    paddingBottom: '50px',
+    paddingBottom: '5px',
   },
 }));
 
@@ -73,10 +74,11 @@ function RegisterForm() {
         onSubmit={submitRegistration}
       >
         <div>
-          <FormControl margin="normal">
+          <FormControl margin="normal" fullWidth>
             <InputLabel htmlFor="name">Name</InputLabel>
             <Input
               name="name"
+              fullWidth
               endAdornment={(
                 <InputAdornment position="end">
                   <IconButton>
@@ -88,7 +90,7 @@ function RegisterForm() {
           </FormControl>
         </div>
         <div>
-          <FormControl margin="normal">
+          <FormControl margin="normal" fullWidth>
             <InputLabel htmlFor="email">E-mail</InputLabel>
             <Input
               name="email"
@@ -96,6 +98,7 @@ function RegisterForm() {
               autoComplete="email"
               value={emailState}
               onChange={updateEmail}
+              fullWidth
               endAdornment={(
                 <InputAdornment position="end">
                   <IconButton>
@@ -107,7 +110,7 @@ function RegisterForm() {
           </FormControl>
         </div>
         <div>
-          <FormControl>
+          <FormControl fullWidth>
             <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
             <Input
               id="inputPassword"
@@ -115,6 +118,7 @@ function RegisterForm() {
               name="password"
               onChange={updatePassword}
               value={passwordState}
+              fullWidth
               endAdornment={(
                 <InputAdornment position="end">
                   <IconButton
@@ -129,7 +133,7 @@ function RegisterForm() {
           </FormControl>
         </div>
         <div>
-          <FormControl>
+          <FormControl fullWidth>
             <InputLabel htmlFor="standard-adornment-password">Password Confirmation</InputLabel>
             <Input
               id="inputPasswordConfirmation"
@@ -137,6 +141,7 @@ function RegisterForm() {
               name="passwordConfirmation"
               onChange={updatePasswordConfirmation}
               value={passwordConfirmationState}
+              fullWidth
               endAdornment={(
                 <InputAdornment position="end">
                   <IconButton
@@ -167,6 +172,12 @@ function RegisterForm() {
             Register
           </Button>
         </CardActions>
+        <Alert variant="outlined" severity="info">
+          Password must have at least 8 characters,
+          <br />
+          {' '}
+          1 uppercase and lowercase letters and 1 symbol.
+        </Alert>
       </form>
     </div>
   );
