@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 import {
-  Box, Button, Divider, Fade, TextField, List, ListSubheader, Modal, makeStyles,
+  Box, Button, Divider, Fade, TextField, List, ListSubheader, Modal, makeStyles, Typography,
 } from '@material-ui/core';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalTitle: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -120,6 +125,9 @@ function TodoList() {
       >
         <Fade in={openState} onSubmit={addTodoItem}>
           <div className={classes.paper}>
+            <Typography variant="h4" gutterBottom className={classes.modalTitle}>
+              Create new task
+            </Typography>
             <form noValidate autoComplete="off" className={classes.root}>
               <div>
                 <TextField id="standard-basic" label="Task name" name="name" inputProps={{ maxLength: 15 }} />

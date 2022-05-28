@@ -21,5 +21,6 @@ module.exports = {
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
+    'linebreak-style': 0,
   },
 };
