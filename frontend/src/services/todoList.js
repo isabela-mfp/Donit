@@ -8,9 +8,8 @@ const saveDb = (db) => localStorage.setItem('database', JSON.stringify(db));
 
 const getDateFromString = (dateString) => (dateString ? moment(dateString).toDate() : null);
 
-export const getAllTodoLists = (user) => {
+export const getAllTodoLists = () => {
   const db = getParsedDb();
-  console.log(user);
   return new Promise((resolve) => {
     resolve(db.todoLists?.map((el) => ({ ...el, items: null })));
   });
