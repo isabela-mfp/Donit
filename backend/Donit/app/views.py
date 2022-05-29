@@ -6,8 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 
 
-def index(request):
-    
+def home_page(request):
     return render(request, 'home.html') #FIXME construir a pagina para exibir os dados da lista
 
 @csrf_exempt
