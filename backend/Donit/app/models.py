@@ -20,10 +20,10 @@ class ListManagement(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_length=500, null=False)
     type = models.CharField(
         max_length=2, 
-        null=True,
+        null=False,
         choices=ListTypesChoice.choices,
         default=ListTypesChoice.NORMAL
     )
