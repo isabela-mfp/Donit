@@ -1,30 +1,22 @@
-const getParsedDb = () => JSON.parse(localStorage.getItem('database'));
-const saveDb = (db) => localStorage.setItem('database', JSON.stringify(db));
+import axios from 'axios';
 
-export const register = (name, email, password) => {
-  const db = getParsedDb();
-  if (!db.users) {
-    db.users = [];
-  }
-  const { users } = db;
-  users.push({
-    id: users.length + 1,
-    name,
-    email,
-    password,
-  });
-  saveDb(db);
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(true), 2000);
-  });
+export const register = async (username, email, password) => {
+  const bodyFormData = new FormData();
+  bodyFormData.append('username', username);
+  bodyFormData.append('email', email);
+  bodyFormData.append('password', password);
+  const res = await axios.post('/register', bodyFormData, { withCredentials: true });
+  // eslint-disable-next-line
+  console.log(res);
+  return res.status === 200;
 };
 
-export const loginService = (email, password) => {
-  const { users } = getParsedDb();
-  const user = users?.filter((el) => el.email === email && el.password === password)[0];
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(user), 2000);
-  });
+export const loginService = async (username, password) => {
+  const bodyFormData = new FormData();
+  bodyFormData.append('username', username);
+  bodyFormData.append('password', password);
+  const res = await axios.post('/login', bodyFormData, { withCredentials: true });
+  return res.status === 200;
 };
 
 export default {

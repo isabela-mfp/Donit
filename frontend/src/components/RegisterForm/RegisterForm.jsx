@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Visibility, VisibilityOff, Mail } from '@material-ui/icons';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import PersonIcon from '@material-ui/icons/Person';
 import { isPasswordValid, isValidEmail } from '../../utils/validators';
 import { register } from '../../services/userService';
 
@@ -47,10 +47,10 @@ function RegisterForm() {
     if (!isValid()) {
       return;
     }
-    const name = ev.target.name.value;
+    const username = ev.target.username.value;
     const email = ev.target.email.value;
     const password = ev.target.password.value;
-    const result = await register(name, email, password);
+    const result = await register(username, email, password);
     if (result) {
       goToLogin();
     }
@@ -75,14 +75,14 @@ function RegisterForm() {
       >
         <div>
           <FormControl margin="normal" fullWidth>
-            <InputLabel htmlFor="name">Name</InputLabel>
+            <InputLabel htmlFor="username">Username</InputLabel>
             <Input
-              name="name"
+              name="username"
               fullWidth
               endAdornment={(
                 <InputAdornment position="end">
                   <IconButton>
-                    <AccountCircleIcon />
+                    <PersonIcon />
                   </IconButton>
                 </InputAdornment>
               )}

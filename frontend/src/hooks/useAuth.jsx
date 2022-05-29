@@ -10,11 +10,19 @@ function useAuth() {
 
   return {
     authed,
-    async login(email, password) {
-      const user = await loginService(email, password);
-      return new Promise((res) => {
-        setAuthed(user);
-        res(user);
+    async login(username, password) {
+      const loginSuccess = await loginService(username, password);
+      const user = {
+        username, password,
+      };
+      return new Promise((res, rej) => {
+        if (loginSuccess) {
+          setAuthed(user);
+          res(user);
+        } else {
+          setAuthed(null);
+          rej();
+        }
       });
     },
     logout() {
