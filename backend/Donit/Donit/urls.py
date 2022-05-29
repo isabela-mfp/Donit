@@ -27,4 +27,7 @@ urlpatterns = [
     re_path(r'^app/(\d+)/del_task$', views.del_task, name='del_task'),
     path('admin/', admin.site.urls),
     path('/', include('app.urls')),
+    path('login', views.login_function, name='login_function'),
+    path('register',  views.registration, name='registration'),
+    path('logout',  views.logout_function, name='logout_function'),
 ]
