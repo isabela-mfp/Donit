@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles, CardActions,
 } from '@material-ui/core';
-import { Visibility, VisibilityOff, Mail } from '@material-ui/icons';
-import { isValidEmail } from '../../utils/validators';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+import PersonIcon from '@material-ui/icons/Person';
 import useAuth from '../../hooks/useAuth';
 
 const useStyles = makeStyles(() => ({
@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
 function LoginForm() {
   const classes = useStyles();
   const [hidePassword, setHidePassword] = useState(true);
-  const [emailState, setEmail] = useState('');
+  const [usernameState, setUsername] = useState('');
   const [passwordState, setPassword] = useState('');
   const { login, user } = useAuth();
   const navigate = useNavigate();
@@ -35,13 +35,11 @@ function LoginForm() {
     setHidePassword(!hidePassword);
   };
 
-  const isValid = () => isValidEmail(emailState);
-
   const submitLogin = async (ev) => {
     ev.preventDefault();
-    const email = ev.target.email.value;
+    const username = ev.target.username.value;
     const password = ev.target.password.value;
-    const userLogin = await login(email, password);
+    const userLogin = await login(username, password);
     if (userLogin) {
       navigate('/panel');
     }
@@ -51,8 +49,8 @@ function LoginForm() {
     setPassword(ev.target.value);
   };
 
-  const updateEmail = (ev) => {
-    setEmail(ev.target.value);
+  const updateUsername = (ev) => {
+    setUsername(ev.target.value);
   };
 
   const goToRegister = () => navigate('/register');
@@ -64,17 +62,15 @@ function LoginForm() {
       >
         <div>
           <FormControl margin="normal">
-            <InputLabel htmlFor="email">E-mail</InputLabel>
+            <InputLabel htmlFor="username">Username</InputLabel>
             <Input
-              name="email"
-              type="email"
-              autoComplete="email"
-              value={emailState}
-              onChange={updateEmail}
+              name="username"
+              value={usernameState}
+              onChange={updateUsername}
               endAdornment={(
                 <InputAdornment position="end">
                   <IconButton>
-                    <Mail />
+                    <PersonIcon />
                   </IconButton>
                 </InputAdornment>
               )}
@@ -112,7 +108,6 @@ function LoginForm() {
             Register
           </Button>
           <Button
-            disabled={!isValid()}
             fullWidth
             variant="outlined"
             type="submit"
