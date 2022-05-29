@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import {
-  Box, Button, Divider, Fade, TextField, List, ListSubheader, Modal, makeStyles,
+  Box, Button, Divider, Fade, TextField, List, ListSubheader, Modal, makeStyles, Typography,
 } from '@material-ui/core';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import TodoListItem from '../TodoListItem/TodoListItem';
 import {
-  getTodoList, deleteTodoListItem, updateTodoListItem, createTodoItem,
+  getTodoListItems, deleteTodoListItem, updateTodoListItem, createTodoItem,
 } from '../../services/todoList';
 import './TodoList.css';
 
@@ -23,35 +22,43 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  modalTitle: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   paper: {
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  containerPadding: {
+    paddingTop: '64px',
+  },
 }));
 
-function TodoList() {
+function TodoList({ todoListId }) {
   const [todoListState, setTodoListState] = useState(null);
   const [openState, setOpenState] = useState(false);
   const classes = useStyles();
 
-  const initialLoadFn = async () => {
-    const todoList = await getTodoList(1);
+  const loadItems = async () => {
+    const todoList = await getTodoListItems(todoListId);
     setTodoListState(todoList);
   };
   useEffect(() => {
-    initialLoadFn();
-  }, []);
+    loadItems();
+  }, [todoListId]);
 
   const updateTodoItem = (todoItem) => {
-    updateTodoListItem(1, todoItem.id);
-    initialLoadFn();
+    updateTodoListItem(todoListId, todoItem.id);
+    loadItems();
   };
 
   const deleteTodoItem = (todoItem) => {
-    deleteTodoListItem(1, todoItem.id);
-    initialLoadFn();
+    deleteTodoListItem(todoListId, todoItem.id);
+    loadItems();
   };
 
   const addTodoItem = (ev) => {
@@ -62,24 +69,24 @@ function TodoList() {
     const todoItem = {
       name, desc, dueDate,
     };
-    createTodoItem(1, todoItem);
+    createTodoItem(todoListId, todoItem);
     setOpenState(false);
-    initialLoadFn();
+    loadItems();
   };
 
   return (
-    <div data-testid="TodoList">
+    <div data-testid="TodoList" className={classes.containerPadding}>
       <List
         component="nav"
         aria-labelledby="nested-list-subheader"
         subheader={(
           <ListSubheader component="div" id="nested-list-subheader">
-            {todoListState?.name}
+            {todoListState?.name || 'Please select a list or create a new one'}
           </ListSubheader>
         )}
         className="todo-list"
       >
-        {todoListState && todoListState.items.map((todoListItem) => (
+        {todoListState && todoListState.items && todoListState.items.map((todoListItem) => (
           <TodoListItem
             key={todoListItem.id}
             todoItem={todoListItem}
@@ -90,22 +97,16 @@ function TodoList() {
         <Divider />
       </List>
       <Box className="button-group">
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<KeyboardReturnIcon />}
-          onClick={() => setOpenState(true)}
-        >
-          Return
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          endIcon={<LibraryAddIcon />}
-          onClick={() => setOpenState(true)}
-        >
-          Add task
-        </Button>
+        {todoListState && todoListState.name && (
+          <Button
+            variant="contained"
+            color="secondary"
+            endIcon={<LibraryAddIcon />}
+            onClick={() => setOpenState(true)}
+          >
+            Add task
+          </Button>
+        )}
       </Box>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -120,6 +121,9 @@ function TodoList() {
       >
         <Fade in={openState} onSubmit={addTodoItem}>
           <div className={classes.paper}>
+            <Typography variant="h4" gutterBottom className={classes.modalTitle}>
+              Create new task
+            </Typography>
             <form noValidate autoComplete="off" className={classes.root}>
               <div>
                 <TextField id="standard-basic" label="Task name" name="name" inputProps={{ maxLength: 15 }} />
@@ -153,8 +157,12 @@ function TodoList() {
   );
 }
 
-TodoList.propTypes = {};
+TodoList.propTypes = {
+  todoListId: PropTypes.number,
+};
 
-TodoList.defaultProps = {};
+TodoList.defaultProps = {
+  todoListId: null,
+};
 
 export default TodoList;

@@ -18,16 +18,20 @@ function TodoListItem({ todoItem, updateHandler, deleteHandler }) {
     <ListItem data-testid="TodoListItem">
       <ListItemIcon>
         <Checkbox edge="start" onClick={checkboxClick} checked={!done} data-testid="Checkbox" classes={{ checked: 'checked' }} />
-        <Badge
-          data-testid="LateBadge"
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          badgeContent={daysLeft}
-          color="error"
-          overlap="circular"
-        />
+        {
+          daysLeft > 0 && (
+          <Badge
+            data-testid="LateBadge"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            badgeContent={daysLeft}
+            color="error"
+            overlap="circular"
+          />
+          )
+        }
       </ListItemIcon>
       <ListItemText primary={todoItem.name} secondary={description} />
       <ListItemSecondaryAction>

@@ -1,19 +1,29 @@
-import { Card, CardHeader, CardContent } from '@material-ui/core';
 import React from 'react';
 import './App.css';
-
-import TodoList from './components/TodoList/TodoList';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from 'react-router-dom';
+import Home from './components/Home/Home';
+import { AuthProvider } from './hooks/useAuth';
+import RequireAuth from './components/RequireAuth/RequireAuth';
+import TodoListPanel from './components/TodoListPanel/TodoListPanel';
 
 function App() {
+  const panel = (
+    <RequireAuth><TodoListPanel /></RequireAuth>);
   return (
-    <div className="App">
-      <Card>
-        <CardHeader title="Donit" />
-        <CardContent>
-          <TodoList />
-        </CardContent>
-      </Card>
-    </div>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/panel" element={panel} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
