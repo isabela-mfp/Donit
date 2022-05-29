@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect, HttpResponse
 from app.models import ListManagement, TaskManagement
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
+
+
 
 
 def home_page(request):
@@ -44,3 +49,42 @@ def del_list(request, list_id):
     deleted = list_.delete()
     return HttpResponse('Lista '+ str(list_id) +' deletada!')
 
+@csrf_exempt
+def registration(request):
+    """ Função de registro do usuário com objeto user do django """
+
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    new_user = User.objects.create_user(username, email, password)
+
+    if new_user is not None:
+        return JsonResponse({'code': '200'})
+    else:
+        return JsonResponse({
+            'code': 'error',
+            'message': "Não foi possível realizar o cadastro. Por favor, tente novamente."
+        })
+
+
+@csrf_exempt
+def login_function(request):
+    """ Função de login do usuário com objeto user do django """
+
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user = authenticate(request, username=username, password=password)
+
+    if user is not None:
+        login(request, user)
+        return JsonResponse({'code': '200'})
+    else:
+        return JsonResponse({
+            'code': 'error',
+            'message': "Os dados informados não estão corretos. Por favor, tente novamente."
+        })
+
+@csrf_exempt
+def logout_function(request):
+    logout(request)
+    return JsonResponse({'code': '200'})
