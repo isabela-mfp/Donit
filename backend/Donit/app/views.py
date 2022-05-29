@@ -6,9 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 
 
-
-
-def home_page(request):
+def index(request):
+    
     return render(request, 'home.html') #FIXME construir a pagina para exibir os dados da lista
 
 @csrf_exempt
@@ -22,7 +21,7 @@ def new_list(request):
         my_list = ListManagement(name=request.POST['name'], type=request.POST['type'], description=request.POST['description'])
         #TODO os dados do POST feito no frontend devem vir com estes campos: name, type, description
         #my_list.save() #FIXME arrumar aqui "FOREIGN KEY constraint failed"
-        return HttpResponse('Lista ' + my_list.name + ' criada!')
+        return HttpResponse('Lista ' + my_list.name + ' criada!') #TODO colocar um redirect
 
 @csrf_exempt
 def new_task(request, list_id):
@@ -35,7 +34,7 @@ def new_task(request, list_id):
         
         my_task = TaskManagement(name=request.POST['name'], description=request.POST['description'], conclusion=request.POST['conclusion'], priority=request.POST['priority'], status=request.POST['status'])
         #my_task.save()
-        return HttpResponse('Tarefa ' + my_task.name + ' criada!')
+        return HttpResponse('Tarefa ' + my_task.name + ' criada!')#TODO colocar um redirect
 
 @csrf_exempt
 def del_task(request, task_id):
