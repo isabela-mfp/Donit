@@ -168,6 +168,7 @@ function RegisterForm() {
             fullWidth
             variant="outlined"
             type="submit"
+            data-testid="RegisterButton"
           >
             Register
           </Button>

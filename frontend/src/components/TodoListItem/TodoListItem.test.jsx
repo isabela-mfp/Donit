@@ -5,22 +5,6 @@ import moment from 'moment';
 import TodoListItem from './TodoListItem';
 
 describe('<TodoListItem />', () => {
-  test('it should mount', () => {
-    const todoItem = {
-      name: 'todo text',
-    };
-
-    render(<TodoListItem
-      todoItem={todoItem}
-      updateHandler={jest.fn()}
-      deleteHandler={jest.fn()}
-    />);
-
-    const todoListItem = screen.getByTestId('TodoListItem');
-
-    expect(todoListItem).toBeInTheDocument();
-  });
-
   test('it should be ticked off', () => {
     const todoItem = {
       name: 'todo text',
@@ -57,6 +41,26 @@ describe('<TodoListItem />', () => {
     checkbox.click();
 
     expect(update).toHaveBeenCalledWith(todoItem);
+  });
+
+  test('it should call update function on click', () => {
+    const todoItem = {
+      name: 'todo text',
+      conclusionDate: null,
+    };
+
+    const deleteHandler = jest.fn();
+
+    render(<TodoListItem
+      todoItem={todoItem}
+      updateHandler={jest.fn()}
+      deleteHandler={deleteHandler}
+    />);
+
+    const deleteBtn = screen.getByTestId('DeleteButton');
+    deleteBtn.click();
+
+    expect(deleteHandler).toHaveBeenCalledWith(todoItem);
   });
 
   test('it should be ticked on when conclusionDate is set', () => {

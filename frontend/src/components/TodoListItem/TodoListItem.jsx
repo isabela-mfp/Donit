@@ -35,7 +35,7 @@ function TodoListItem({ todoItem, updateHandler, deleteHandler }) {
       </ListItemIcon>
       <ListItemText primary={todoItem.name} secondary={description} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="delete" onClick={deleteButtonClick}>
+        <IconButton edge="end" aria-label="delete" onClick={deleteButtonClick} data-testid="DeleteButton">
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
