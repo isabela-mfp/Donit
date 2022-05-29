@@ -6,8 +6,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 
 
-
-
 def home_page(request):
     return render(request, 'home.html') #FIXME construir a pagina para exibir os dados da lista
 
@@ -56,15 +54,15 @@ def registration(request):
     username = request.POST.get('username')
     email = request.POST.get('email')
     password = request.POST.get('password')
+    if username == None or password == None or email == None:
+        return HttpResponse(status=400)
+        
     new_user = User.objects.create_user(username, email, password)
 
     if new_user is not None:
-        return JsonResponse({'code': '200'})
+        return HttpResponse(status=200)
     else:
-        return JsonResponse({
-            'code': 'error',
-            'message': "Não foi possível realizar o cadastro. Por favor, tente novamente."
-        })
+        return HttpResponse(status=400)
 
 
 @csrf_exempt
@@ -73,18 +71,16 @@ def login_function(request):
 
     username = request.POST.get('username')
     password = request.POST.get('password')
+    print(request)
     user = authenticate(request, username=username, password=password)
 
     if user is not None:
         login(request, user)
-        return JsonResponse({'code': '200'})
+        return HttpResponse(status=200)
     else:
-        return JsonResponse({
-            'code': 'error',
-            'message': "Os dados informados não estão corretos. Por favor, tente novamente."
-        })
+        return HttpResponse(status=401)
 
 @csrf_exempt
 def logout_function(request):
     logout(request)
-    return JsonResponse({'code': '200'})
+    return HttpResponse(status=200)

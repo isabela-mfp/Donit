@@ -7,6 +7,7 @@ class TestShowList(TestCase):
         pass
     
     def test_retorna_home_page(self): 
-        response = Client.get('/')
-        self.assertTrue(response.status_code, 200)
-        self.assertIn(response.text, 'Lista To-Do')
+    	c = Client()
+    	response = c.get('/')
+    	self.assertTrue(response.status_code, 200)
+    	self.assertIn(response.text, 'Lista To-Do')
