@@ -16,3 +16,4 @@ class TestExibeViews(TestCase):
     def test_access_login_page(self): 
         response = self.client.get('/login')
         self.assertTrue(response.status_code, 200)
+
