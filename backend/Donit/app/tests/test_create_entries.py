@@ -1,59 +1,11 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from app.models import ListManagement, TaskManagement
 import datetime
 from django.contrib.auth.models import User
 
 
 # Testes  para o banco de dados
-class TestFieldsLists(TestCase):
-    def setUp(self):
-        self.u1 = User(username='dummy')
-        self.u1.save()
-        self.L = ListManagement 
-        self.L.userid = self.u1
-    
-    def test_all_fields_list_are_ok(self):
-        self.L = ListManagement(name='Lista 1', description='Esta eh a primeira lista de teste', type='A')
-        #TODO check for notrhow
-    def test_all_fields_list_are_empty(self):
-        #TODO check for exceptions
-        L = ListManagement(name='', description='', type='')
-    def test_name_field_list_is_empty(self):
-        L = ListManagement(name='', description='Esta eh a primeira lista de teste', type='A')
-    def test_description_field_list_is_empty(self):
-        L = ListManagement(name='Lista 1', description='', type='A')
-    def test_incorrect_type_list_is_empty(self):
-        L = ListManagement(name='Lista 1', description='Esta eh a primeira lista de teste', type='')
-
-class TestFieldsTasks(TestCase):
-    def setUp(self):
-        self.u1 = User(username='dummy')
-        self.u1.save()
-        self.L = TaskManagement 
-        self.L.userid = self.u1
-    #TODO check for notrhow
-    def test_all_fields_task_are_ok(self):
-        T = TaskManagement(name='Tarefa 1', description='Esta eh a primeira tarefa de teste', conclusion=datetime.date(2022, 9, 9), priority=1, status='T')
-    #TODO check for exceptions
-    def test_all_fields_task_are_empty(self):
-        T = TaskManagement(name='', description='', conclusion=None, priority=0, status='')
-
-    def test_name_field_task_is_empty(self):
-        T = TaskManagement(name='', description='Esta eh a primeira tarefa de teste', conclusion=datetime.date(2022, 9, 9), priority=1, status='T')
-
-    def test_description_field_task_is_empty(self):
-        T = TaskManagement(name='Tarefa 1', description='', conclusion=datetime.date(2022, 9, 9), priority=1, status='T')
-
-    def test_date_field_task_is_empty(self):
-        T = TaskManagement(name='Tarefa 1', description='Esta eh a primeira tarefa de teste', conclusion=None, priority=1, status='T')
-
-    def test_incorrect_task_priority(self):
-        T = TaskManagement(name='Tarefa 1', description='Esta eh a primeira tarefa de teste', conclusion=datetime.date(2022, 9, 9), priority=0, status='T')
-
-    def test_status_task_is_empty(self):
-        T = TaskManagement(name='Tarefa 1', description='Esta eh a primeira tarefa de teste', conclusion=datetime.date(2022, 9, 9), priority=1, status='')
-
-class TestCreateListas(TestCase):
+class TestCreateLists(TestCase):
     def setUp(self):
         self.u1 = User(username='dummy')
         self.u1.save() # User model provided by django
