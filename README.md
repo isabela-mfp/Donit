@@ -5,7 +5,7 @@
 * Breno de Castro Pimenta **2017114809**
 * Isabela Marina Ferreira Pires **2017014634**
 * Lecio Alves **2016065120**
-* Rafael Gonçalves <TODO>
+* Rafael Gonçalves **2017014685**
 
 ## Descrição:
 O Donit é um sistema de gerenciamento de lista de tarefas. Essas listas podem atender a diversos usos, de lista de compras à afazeres.
@@ -23,8 +23,9 @@ udado nos testes.
   As outras duas entidades foram criadas a partir da classe Model do django, onde cada tarefa é relacionada a uma lista e cada lista é relacionada a um Usuário.
   Existem duas rotas principais de acesso à aplicação, a rota para login e registro, e outra rota para a gestão das listas.
   
-* **FrontEnd**
-  <TODO>
+* **FrontEnd**:
+  Para a construção do frontend foi utilizado a biblioteca React.js. Foram desenvolvidos 3 páginas principais, de login, registro e gerenciamento de listas de tarefas.   Para a construção dos componentes também foram utilizados alguns módulos da biblioteca material-ui para React. Nos formulários, como de registro e criação de tarefas, validações foram adicionadas para garantir integridade no formato e tipo dos dados.
+  Para a comunicação com o backend foram realizadas requisições HTTP através da biblioteca axios, que também ajuda lidar com cookies de sessão, como os fornecidos pelo Django. Os testes automatizados foram desenvolvidos utilizando jest e são compostos por uma mistura de testes realmente unitários e de componentes.
 
 
 
