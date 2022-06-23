@@ -30,6 +30,8 @@ jobs:
       run: |
         cd backend/Donit
         python manage.py test
+    - name: Codecov
+      uses: codecov/codecov-action@v3.1.0
 
   frontend_quality:
 
@@ -57,3 +59,5 @@ jobs:
       run: |
         cd frontend
         npm run quality
+    - name: Codecov
+      uses: codecov/codecov-action@v3.1.0
