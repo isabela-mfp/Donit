@@ -14,7 +14,7 @@ describe('Registration and login flow', () => {
   });
 
   it('should register a new user', async () => {
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto('http://localhost:3000');
     await page.waitForSelector('#register__btn');
     await page.click('#register__btn');
     await page.waitForSelector('[data-testid="RegisterForm"]');
@@ -41,7 +41,7 @@ describe('Registration and login flow', () => {
 
   describe('Login after registering a user', () => {
     it('it should login with new created user', async () => {
-      await page.goto('http://127.0.0.1:3000');
+      await page.goto('http://localhost:3000');
       await page.waitForSelector('#register__btn');
 
       await page.click('input[name=username]');

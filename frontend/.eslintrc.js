@@ -22,5 +22,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'linebreak-style': 0,
+    'import/no-unresolved': 'off',
   },
 };

@@ -54,7 +54,7 @@ jobs:
     - name: Install Dependencies
       run: |
         cd frontend
-        npm i --force
+        npm i
     - name: Run Quality Script
       run: |
         cd frontend
@@ -93,15 +93,15 @@ jobs:
     - name: Execute Frontend
       run: |
         cd frontend
-        npm i --force
-        npm start
+        npm i
+        npm start &
     - name: Wait for frontend
       uses: nev7n/wait_for_response@v1
       with:
-        url: 'http://127.0.0.1:3000/'
+        url: 'http://localhost:3000/'
         responseCode: 200
-        timeout: 50000
-        interval: 500
+        timeout: 120000
+        interval: 1000
     - name: Run tests
       run: |
         cd frontend

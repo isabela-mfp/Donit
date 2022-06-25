@@ -1,30 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles, CardActions,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
-import { Visibility, VisibilityOff, Mail } from '@material-ui/icons';
-import PersonIcon from '@material-ui/icons/Person';
+  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, CardActions,
+  Alert,
+} from '@mui/material';
+import { Visibility, VisibilityOff, Mail } from '@mui/icons-material';
+import PersonIcon from '@mui/icons-material/Person';
 import { isPasswordValid, isValidEmail } from '../../utils/validators';
 import { register } from '../../services/userService';
-
-// import PropTypes from 'prop-types';
-
-const useStyles = makeStyles(() => ({
-  flexCenter: {
-    display: 'flex',
-    width: '100%',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    paddingBottom: '5px',
-  },
-}));
+import './RegisterForm.css';
 
 function RegisterForm() {
-  const classes = useStyles();
   const [hidePassword, setHidePassword] = useState(true);
   const [emailState, setEmail] = useState('');
   const [passwordState, setPassword] = useState('');
@@ -69,7 +55,7 @@ function RegisterForm() {
   };
 
   return (
-    <div data-testid="RegisterForm" className={classes.flexCenter}>
+    <div data-testid="RegisterForm" className="flexCenter">
       <form
         onSubmit={submitRegistration}
       >

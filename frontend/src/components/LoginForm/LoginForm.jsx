@@ -1,26 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, makeStyles, CardActions,
-} from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
-import PersonIcon from '@material-ui/icons/Person';
+  InputLabel, Input, InputAdornment, FormControl, Button, IconButton, CardActions,
+} from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import PersonIcon from '@mui/icons-material/Person';
 import useAuth from '../../hooks/useAuth';
-
-const useStyles = makeStyles(() => ({
-  flexCenter: {
-    display: 'flex',
-    width: '100%',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    paddingBottom: '5px',
-  },
-}));
+import './LoginForm.css';
 
 function LoginForm() {
-  const classes = useStyles();
   const [hidePassword, setHidePassword] = useState(true);
   const [usernameState, setUsername] = useState('');
   const [passwordState, setPassword] = useState('');
@@ -56,7 +45,7 @@ function LoginForm() {
   const goToRegister = () => navigate('/register');
 
   return (
-    <div data-testid="LoginForm" className={classes.flexCenter}>
+    <div data-testid="LoginForm" className="flexCenter">
       <form
         onSubmit={submitLogin}
       >
@@ -92,7 +81,7 @@ function LoginForm() {
                     aria-label="toggle password visibility"
                     onClick={showPassword}
                   >
-                    {hidePassword ? <Visibility /> : <VisibilityOff />}
+                    {hidePassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
               )}

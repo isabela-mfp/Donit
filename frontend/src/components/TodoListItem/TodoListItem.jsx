@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {
   Checkbox, Badge, ListItemIcon, ListItem, ListItemText, ListItemSecondaryAction, IconButton,
   Typography,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 
 function TodoListItem({ todoItem, updateHandler, deleteHandler }) {
