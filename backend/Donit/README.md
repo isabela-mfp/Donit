@@ -16,8 +16,8 @@ Trabalho Prático da disciplina de Teste de Software
     2. Activate enviroment:  `source venv/bin/activate`
     3. Install requirements: `pip install -r requirements.txt`
 * Migrations:
-    1. python3 manage.py makemigrations
-    2. python3 manage.py migrate
+    1. `python3 manage.py makemigrations app`
+    2. `python3 manage.py migrate app`
 
 
 ### Execute:
