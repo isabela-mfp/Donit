@@ -103,6 +103,7 @@ function LoginForm() {
           <Button
             fullWidth
             variant="outlined"
+            id="register__btn"
             onClick={goToRegister}
           >
             Register
@@ -111,6 +112,7 @@ function LoginForm() {
             fullWidth
             variant="outlined"
             type="submit"
+            id="login__btn"
           >
             Login
           </Button>

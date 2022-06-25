@@ -160,7 +160,7 @@ function TodoListPanel() {
           </IconButton>
           <Typography variant="h6" noWrap>
             <DoneAllIcon />
-            Donit
+            <span id="page__title">Donit</span>
           </Typography>
         </Toolbar>
       </AppBar>
