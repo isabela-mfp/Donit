@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 describe('Registration and login flow', () => {
   let browser;
