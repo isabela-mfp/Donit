@@ -89,6 +89,6 @@ jobs:
         npm i --force
     - name: Run tests
       run: |
-        npm --prefix frontend run start
-        python ./backend/Donit/manage.py runserver
+        npm --prefix frontend run start &
+        python ./backend/Donit/manage.py runserver &
         npm run test:e2e

@@ -29,7 +29,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "quality": "eslint . && react-scripts test --coverage --watchAll=false"
+    "quality": "eslint . && react-scripts test --coverage --watchAll=false --testPathIgnorePatterns=.*e2e.test.js"
   },
   "eslintConfig": {
     "extends": [
