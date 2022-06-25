@@ -22,7 +22,7 @@ class ListManagement(models.Model):
     )
     name = models.CharField(max_length=500, null=False)
     type = models.CharField(
-        max_length=2, 
+        max_length=2,
         null=False,
         choices=ListTypesChoice.choices,
         default=ListTypesChoice.NORMAL
@@ -31,16 +31,17 @@ class ListManagement(models.Model):
 
 class TaskManagement(models.Model):
     id = models.AutoField(primary_key=True)
+    listid = models.ForeignKey(ListManagement, on_delete=models.CASCADE)
     name = models.CharField(max_length=500)
     description = models.TextField()
     creation = models.DateTimeField(auto_now_add=True, editable=False)
-    conclusion = models.DateField(null=False, blank=False)
+    conclusion = models.DateField(null=True, blank=True)
     priority = models.IntegerField(
         default=1,
         validators=[MaxValueValidator(50), MinValueValidator(1)]
      )
     status = models.CharField(
-        max_length=2, 
-        choices=TaskStatusChoice.choices, 
+        max_length=2,
+        choices=TaskStatusChoice.choices,
         default=TaskStatusChoice.TO_DO
     )

@@ -29,6 +29,10 @@ urlpatterns = [
     re_path(r'^app/del_list/(\d+)$', views.del_list, name='del_list'),
     re_path(r'^app/(\d+)/new_task$', views.new_task, name='new_task'),
     re_path(r'^app/(\d+)/del_task$', views.del_task, name='del_task'),
+
+    path('app/list', views.list_controller, name='list_controller'),
+    #path('app/task', views.task_enpoint, name='task_controller'),
+
     path('admin/', admin.site.urls),
     path('/', include('app.urls')),
     path('login', views.login_function, name='login_function'),
