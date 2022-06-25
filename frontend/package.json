@@ -25,11 +25,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --testPathIgnorePatterns=.*e2e.test.js",
-    "test:e2e": "react-scripts test --testPathPattern=.*e2e.test.js$", 
+    "test:e2e": "react-scripts test --watchAll=false --testPathPattern=.*e2e.test.js$", 
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "quality": "eslint . && react-scripts test --watchAll=false"
+    "quality": "eslint . && react-scripts test --coverage --watchAll=false"
   },
   "eslintConfig": {
     "extends": [
