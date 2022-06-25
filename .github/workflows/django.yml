@@ -84,19 +84,18 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: frontend/package-lock.json
-    - name: Install Backend Dependencies
+    - name: Execute Backend
       run: |
         pip install --upgrade pip
         cd backend/Donit
         pip install -r requirements.txt
-    - name: Install nodejs
-      run: pip install nodejs
-    - name: Install Frontend Dependencies
+        python manage.py runserver &
+    - name: Execute Frontend
       run: |
         cd frontend
         npm i --force
+        npm start &
     - name: Run tests
       run: |
-        npm --prefix frontend run start &
-        python ./backend/Donit/manage.py runserver &
+        cd frontend
         npm run test:e2e
