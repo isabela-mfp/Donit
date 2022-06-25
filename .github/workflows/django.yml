@@ -26,13 +26,15 @@ jobs:
         pip install --upgrade pip
         cd backend/Donit
         pip install -r requirements.txt
-    # - name: Run Tests
-    #   run: |
-    #     cd backend/Donit
-    #     python manage.py test
-    # - name: Codecov
-    #   uses: codecov/codecov-action@v3.1.0
-
+    - name: Run tests with coverage
+      run: |
+        cd backend/Donit
+        coverage run manage.py test
+        coverage report
+        
+    - name: Upload to codecov
+      uses: codecov/codecov-action@v3.1.0
+  
   frontend_quality:
 
     runs-on: ubuntu-latest
