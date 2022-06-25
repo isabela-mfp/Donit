@@ -94,7 +94,7 @@ jobs:
       run: |
         cd frontend
         npm i --force
-        npm start &
+        npm start
     - name: Wait for frontend
       uses: nev7n/wait_for_response@v1
       with:
