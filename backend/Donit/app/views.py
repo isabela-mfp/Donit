@@ -11,29 +11,36 @@ def home_page(request):
 
 @csrf_exempt
 def new_list(request):
+    """ Funçao que cria nova lista """
+    
     if request.method == 'POST': #TODO quando um campo enviado nao existe, MultiValueDict sera lançada, escrever teste para isso.
         if len(request.POST['name']) > 500 or len(request.POST['description']) > 500:
-            return HttpResponse('Erro ao adicionar lista!')
+            return JsonResponse({'function': 'new_list', 'result': 'fail'}, status=405)
         #if len(request.POST['type']) > 2 or request.POST['type'] not in ['N', 'S', 'A', 'T', 'F']:  
         #    return HttpResponse('Erro ao adicionar lista!')
         
         my_list = ListManagement(name=request.POST['name'], type=request.POST['type'], description=request.POST['description'])
         #TODO os dados do POST feito no frontend devem vir com estes campos: name, type, description
         #my_list.save() #FIXME arrumar aqui "FOREIGN KEY constraint failed"
-        return HttpResponse('Lista ' + my_list.name + ' criada!') #TODO colocar um redirect
+        return JsonResponse({'function': 'new_list', 'result': 'success'}, status=200)
+    else:
+        return JsonResponse({'function': 'new_list', 'result': 'method_not_allowed'}, status=405)
 
 @csrf_exempt
 def new_task(request, list_id):
     if request.method == 'POST':
         if len(request.POST['name']) > 500 or len(request.POST['description']) > 500:
-            return HttpResponse('Erro ao adicionar tarefa!')
+            return JsonResponse({'function': 'new_task', 'result': 'fail'}, status=405)
         #if len(request.POST['status']) > 2 or request.POST['status'] not in ['D', 'T']:  
         #    return HttpResponse('Erro ao adicionar tarefa!')
         
         
         my_task = TaskManagement(name=request.POST['name'], description=request.POST['description'], conclusion=request.POST['conclusion'], priority=request.POST['priority'], status=request.POST['status'])
         #my_task.save()
-        return HttpResponse('Tarefa ' + my_task.name + ' criada!')#TODO colocar um redirect
+            return JsonResponse({'function': 'new_task', 'result': 'success'}, status=200)
+    else:
+            return JsonResponse({'function': 'new_task', 'result': 'method_not_allowed'}, status=405)
+        
 
 @csrf_exempt
 def del_task(request, task_id):
