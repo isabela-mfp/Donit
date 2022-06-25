@@ -86,7 +86,7 @@ jobs:
     - name: Install Frontend Dependencies
       run: |
         cd frontend
-        npm ci
+        npm i
     - name: Run tests
       run: |
         python ./backend/Donit/manage.py runserver & cd frontend && npm start & npm run test:e2e
