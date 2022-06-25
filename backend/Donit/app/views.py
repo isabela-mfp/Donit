@@ -14,9 +14,8 @@ def list_controller(request, request_id=None):
         """Delete a list by ID"""
         if not request_id:
             return JsonResponse({'function': 'delete_list', 'result': 'No list id'}, status=405)
-        task = TaskManagement.objects.get(pk=request_id)
-        deleted = task.delete()
-        return HttpResponse(str(deleted))
+        ListManagement.objects.filter(id=request_id).delete()
+        return HttpResponse('success')
 
     elif request.method == 'GET':
         """Get Lists by user ou one list by ID"""
@@ -95,9 +94,8 @@ def task_controller(request, request_id=None):
     if request.method == 'DELETE':
         if not request_id:
             return JsonResponse({'function': 'new_task', 'result': 'No task id'}, status=405)
-        task = TaskManagement.objects.get(id=request_id)
-        deleted = task.delete()
-        return HttpResponse(str(deleted))
+        TaskManagement.objects.filter(id=request_id).delete()
+        return HttpResponse('success')
 
     elif request.method == 'GET':
         if not request_id:
@@ -125,7 +123,6 @@ def task_controller(request, request_id=None):
             return JsonResponse({'function': 'new_task', 'result': 'fail'}, status=405)
         except Exception as e:
             return JsonResponse({'function': 'new_task', 'result': 'fail in request list'}, status=405)
-
         my_task = TaskManagement(
             name=name,
             listid=request_list,
@@ -135,7 +132,6 @@ def task_controller(request, request_id=None):
             priority=priority,
             status=status
         )
-
         try:
             my_task.save()
         except Exception as e:
@@ -144,7 +140,6 @@ def task_controller(request, request_id=None):
     else:
         return JsonResponse({'function': 'new_task', 'result': 'method_not_allowed'}, status=405)
 
-#------------------------------------------------------------------------
 
 '''
 def home_page(request):

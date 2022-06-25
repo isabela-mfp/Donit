@@ -22,6 +22,7 @@ from app import views
 '''
 TODO: Old Pattern, delete after complete refactoring process
     re_path(r'^$', views.home_page, name='index'),
+    re_path(r'^$', views.home_page, name='index'),
     re_path(r'^login$', views.login_function, name='login_function'),
     re_path(r'^register$',  views.registration, name='registration'),
     re_path(r'^logout$',  views.logout_function, name='logout_function'),
