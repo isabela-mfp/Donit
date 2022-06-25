@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Card, Drawer, IconButton, Divider, Modal, Fade, TextField, Button, Box,
-  AppBar, Toolbar, Typography, makeStyles, List, ListItem, ListItemText,
+  AppBar, Toolbar, Typography, makeStyles, List, ListItem, ListItemText, Grid, Select, MenuItem,
 } from '@material-ui/core';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -9,17 +9,15 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TodoList from '../TodoList/TodoList';
 import useAuth from '../../hooks/useAuth';
 
-import { createTodoList, getAllTodoLists } from '../../services/todoList';
+import { createTodoList, getAllTodoLists, deleteTodoList } from '../../services/todoList';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -96,6 +94,11 @@ function TodoListPanel() {
   const [openState, setOpenState] = useState(false);
   const [selectedTodoList, setSelectedTodoList] = useState(null);
   const { logout } = useAuth();
+  const [type, setType] = useState(null);
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+  };
 
   const handleDrawerClose = () => setOpen(false);
   const handleDrawerOpen = () => setOpen(true);
@@ -110,13 +113,27 @@ function TodoListPanel() {
     const name = ev.target.name.value;
     const desc = ev.target.desc.value;
 
-    createTodoList(name, desc);
-    setOpenState(false);
-    loadItems();
+    if (createTodoList(name, desc, type)) {
+      setTimeout(() => {
+        setOpenState(false);
+        loadItems();
+      }, 100);
+    }
   };
 
   const loadTodoList = (id) => {
     setSelectedTodoList(id);
+  };
+
+  const callDeleteTodoList = async (ev, id) => {
+    ev.stopPropagation();
+    const res = await deleteTodoList(id);
+    if (res) {
+      setTimeout(loadItems, 100);
+      if (selectedTodoList === id) {
+        setSelectedTodoList(null);
+      }
+    }
   };
 
   useEffect(() => {
@@ -170,6 +187,9 @@ function TodoListPanel() {
             todoListState && todoListState.map((item) => (
               <ListItem button key={item.id} onClick={() => loadTodoList(item.id)}>
                 <ListItemText primary={item.name} />
+                <IconButton edge="end" aria-label="delete" onClick={(ev) => callDeleteTodoList(ev, item.id)} data-testid="DeleteButton">
+                  <DeleteIcon />
+                </IconButton>
               </ListItem>
             ))
           }
@@ -212,21 +232,43 @@ function TodoListPanel() {
                 Create new list
               </Typography>
               <form noValidate autoComplete="off" className={classes.root} onSubmit={save}>
-                <div>
-                  <TextField id="standard-basic" label="List name" fullWidth name="name" inputProps={{ maxLength: 15 }} />
-                </div>
-                <div className="form-last-row">
-                  <TextField
-                    id="standard-multiline-static"
-                    label="Description"
-                    name="desc"
-                    multiline
-                    rows={4}
-                  />
-                  <Button variant="contained" color="secondary" type="submit">
-                    Submit task
-                  </Button>
-                </div>
+                <Grid container rowSpacing={2} fullWidth>
+                  <Grid item xs={12} fullWidth>
+                    <TextField id="standard-basic" label="List name" fullWidth name="name" inputProps={{ maxLength: 15 }} />
+                  </Grid>
+                  <Grid item xs={12} fullWidth>
+                    <TextField
+                      id="standard-multiline-static"
+                      label="Description"
+                      name="desc"
+                      multiline
+                      rows={4}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={type}
+                      label="Tipo"
+                      onChange={handleChange}
+                      fullWidth
+                    >
+                      <MenuItem value={null} disabled>Selecionar tipo</MenuItem>
+                      <MenuItem value="N">Normal</MenuItem>
+                      <MenuItem value="S">Supermercado</MenuItem>
+                      <MenuItem value="A">Academia</MenuItem>
+                      <MenuItem value="T">Trabalho</MenuItem>
+                      <MenuItem value="F">Faculdade</MenuItem>
+                    </Select>
+                  </Grid>
+                  <Grid item xs={12} fullWidth style={{ marginTop: 10 }}>
+                    <Button variant="contained" color="secondary" type="submit">
+                      Submit todo list
+                    </Button>
+                  </Grid>
+                </Grid>
               </form>
             </div>
           </Fade>

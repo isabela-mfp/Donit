@@ -35,6 +35,7 @@ class TaskManagement(models.Model):
     name = models.CharField(max_length=500)
     description = models.TextField()
     creation = models.DateTimeField(auto_now_add=True, editable=False)
+    dueDate = models.DateTimeField(null=True, blank=True)
     conclusion = models.DateField(null=True, blank=True)
     priority = models.IntegerField(
         default=1,

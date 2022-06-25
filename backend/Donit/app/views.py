@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core import serializers
+from datetime import datetime
 
 @csrf_exempt
 def list_controller(request, request_id=None):
@@ -13,7 +14,7 @@ def list_controller(request, request_id=None):
     if request.method == 'DELETE':
         """Delete a list by ID"""
         if not request_id:
-            return JsonResponse({'function': 'delete_list', 'result': 'No list id'}, status=405)
+            return JsonResponse({'function': 'delete_list', 'result': 'No list id'}, status=400)
         ListManagement.objects.filter(id=request_id).delete()
         return HttpResponse('success')
 
@@ -52,7 +53,7 @@ def list_controller(request, request_id=None):
             if len(request.POST['name']) > 500 or len(request.POST['description']) > 500:
                 raise MultiValueDictKeyError()
         except MultiValueDictKeyError as e:
-            return JsonResponse({'function': 'new_list', 'result': 'fail'}, status=405)
+            return JsonResponse({'function': 'new_list', 'result': 'fail'}, status=400)
 
         if not request.user.id:
             try:
@@ -80,10 +81,10 @@ def list_controller(request, request_id=None):
         try:
             my_list.save()
         except Exception:
-            return JsonResponse({'function': 'new_list', 'result': 'save_failed'}, status=405)
+            return JsonResponse({'function': 'new_list', 'result': 'save_failed'}, status=400)
         return JsonResponse({'function': 'new_list', 'result': 'success'}, status=200)
     else:
-        return JsonResponse({'function': 'new_list', 'result': 'method_not_allowed'}, status=405)
+        return JsonResponse({'function': 'new_list', 'result': 'method_not_allowed'}, status=400)
 
 
 @csrf_exempt
@@ -93,13 +94,13 @@ def task_controller(request, request_id=None):
 
     if request.method == 'DELETE':
         if not request_id:
-            return JsonResponse({'function': 'new_task', 'result': 'No task id'}, status=405)
+            return JsonResponse({'function': 'new_task', 'result': 'No task id'}, status=400)
         TaskManagement.objects.filter(id=request_id).delete()
         return HttpResponse('success')
 
     elif request.method == 'GET':
         if not request_id:
-            return JsonResponse({'function': 'new_task', 'result': 'No list id'}, status=405)
+            return JsonResponse({'function': 'new_task', 'result': 'No list id'}, status=400)
         all_taks_in_list = TaskManagement.objects.filter(listid=request_id)
         json_res = serializers.serialize('json', all_taks_in_list)
         return HttpResponse(json_res, content_type='application/json')
@@ -110,33 +111,40 @@ def task_controller(request, request_id=None):
         try:
             name = request.POST['name']
             description = request.POST['description']
-            creation = request.POST['creation']
-            conclusion = request.POST['conclusion']
             priority = request.POST['priority']
             status = request.POST['status']
+            dueDate = request.POST['dueDate']
+            list_id = request_id
             if len(request.POST['name']) > 500 or len(request.POST['description']) > 500:
                 raise MultiValueDictKeyError()
             request_list = ListManagement.objects.get(id=list_id)
             if not request_list:
                 raise Exception()
         except MultiValueDictKeyError as e:
-            return JsonResponse({'function': 'new_task', 'result': 'fail'}, status=405)
+            return JsonResponse({'function': 'new_task', 'result': 'fail'}, status=400)
         except Exception as e:
-            return JsonResponse({'function': 'new_task', 'result': 'fail in request list'}, status=405)
+            return JsonResponse({'function': 'new_task', 'result': 'fail in request list'}, status=400)
         my_task = TaskManagement(
             name=name,
             listid=request_list,
             description=description,
-            creation=creation,
-            conclusion=conclusion,
             priority=priority,
-            status=status
+            status=status,
+            dueDate=dueDate
         )
         try:
             my_task.save()
         except Exception as e:
-            return JsonResponse({'function': 'new_task', 'result': str(e)}, status=405)
+            return JsonResponse({'function': 'new_task', 'result': str(e)}, status=400)
         return JsonResponse({'function': 'new_task', 'result': 'success'}, status=200)
+    elif request.method == 'PUT':
+        selected_task = TaskManagement.objects.get(pk=request_id)
+        if (selected_task.conclusion == None):
+            selected_task.conclusion = datetime.now()
+        else:
+            selected_task.conclusion = None
+        selected_task.save()
+        return HttpResponse(None, content_type='application/json')
     else:
         return JsonResponse({'function': 'new_task', 'result': 'method_not_allowed'}, status=405)
 

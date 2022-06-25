@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Checkbox, Badge, ListItemIcon, ListItem, ListItemText, ListItemSecondaryAction, IconButton,
+  Typography,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
 
 function TodoListItem({ todoItem, updateHandler, deleteHandler }) {
   const done = todoItem.conclusionDate == null;
-  const description = todoItem.desc ? todoItem.desc.substring(0, 40) : '';
+  const description = todoItem.description ? todoItem.description.substring(0, 40) : '';
   const daysDifference = todoItem.dueDate ? moment().diff(moment(todoItem.dueDate), 'days') : 0;
   const daysLeft = !done && daysDifference > 0 ? 0 : daysDifference;
   const checkboxClick = () => updateHandler(todoItem);
@@ -33,7 +34,22 @@ function TodoListItem({ todoItem, updateHandler, deleteHandler }) {
           )
         }
       </ListItemIcon>
-      <ListItemText primary={todoItem.name} secondary={description} />
+      <ListItemText
+        primary={todoItem.name}
+        secondary={(
+          <>
+            <Typography
+              sx={{ display: 'inline' }}
+              component="span"
+              variant="body2"
+              color="text.primary"
+            >
+              {todoItem.dueDate.split('T')[0]}
+            </Typography>
+            {` — ${description}...`}
+          </>
+        )}
+      />
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="delete" onClick={deleteButtonClick} data-testid="DeleteButton">
           <DeleteIcon />
@@ -47,9 +63,9 @@ TodoListItem.propTypes = {
   todoItem: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
-    desc: PropTypes.string,
-    conclusionDate: PropTypes.instanceOf(Date),
-    dueDate: PropTypes.instanceOf(Date),
+    description: PropTypes.string,
+    conclusionDate: PropTypes.string,
+    dueDate: PropTypes.string,
   }).isRequired,
   updateHandler: PropTypes.func.isRequired,
   deleteHandler: PropTypes.func.isRequired,

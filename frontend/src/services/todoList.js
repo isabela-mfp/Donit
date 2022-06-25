@@ -1,74 +1,69 @@
-import moment from 'moment';
-import database from '../data/todolist';
+import axios from 'axios';
 
-const getParsedDb = () => JSON.parse(localStorage.getItem('database'));
-
-if (!getParsedDb()) {
-  localStorage.setItem('database', JSON.stringify(database));
-}
-const saveDb = (db) => localStorage.setItem('database', JSON.stringify(db));
-
-const getDateFromString = (dateString) => (dateString ? moment(dateString).toDate() : null);
-
-export const getAllTodoLists = () => {
-  const db = getParsedDb();
-  return new Promise((resolve) => {
-    resolve(db.todoLists?.map((el) => ({ ...el, items: null })));
-  });
+export const getAllTodoLists = async () => {
+  const res = await axios.get('/app/list', { withCredentials: true });
+  return res.data.map((el) => ({
+    id: el.pk,
+    desc: el.fields.description,
+    name: el.fields.name,
+  }));
 };
 
-export const getTodoListItems = (id) => {
-  const { todoLists } = getParsedDb();
-  return new Promise((resolve) => {
-    const todoList = todoLists.filter((el) => el.id === id)[0];
-    const { items } = todoList || { items: [] };
-    const mappedItems = items.map((el) => ({
-      ...el,
-      dueDate: getDateFromString(el.dueDate),
-      conclusionDate: getDateFromString(el.conclusionDate),
-    }));
-    resolve({
-      ...todoList,
-      items: mappedItems,
-    });
-  });
+export const getTodoListItems = async (id) => {
+  const res = await axios.get(`app/list/${id}/`, { withCredentials: true });
+  const list = res.data.map((el) => ({
+    id: el.pk,
+    desc: el.fields.description,
+    name: el.fields.name,
+  }))[0];
+  const tasks = await axios.get(`app/task/${id}/`, { withCredentials: true });
+  list.items = tasks.data.map((el) => ({
+    id: el.pk,
+    conclusionDate: el.fields.conclusion,
+    creation: el.fields.creation,
+    description: el.fields.description,
+    dueDate: el.fields.dueDate,
+    name: el.fields.name,
+    priority: el.fields.priority,
+    status: el.fields.status,
+  }));
+  return list;
 };
 
-export const createTodoList = (name, description) => {
-  const db = getParsedDb();
-  db.todoLists.push({
-    id: db.todoLists.length + 1,
-    name,
-    description,
-    items: [],
-  });
-  saveDb(db);
+export const createTodoList = async (name, description, type) => {
+  const bodyFormData = new FormData();
+  bodyFormData.append('name', name);
+  bodyFormData.append('description', description);
+  bodyFormData.append('type', type);
+  const res = await axios.post('/app/list', bodyFormData, { withCredentials: true });
+  return res.status === 200;
 };
 
-export const updateTodoListItem = (todoListId, itemId) => {
-  const db = getParsedDb();
-  const { items } = db.todoLists.filter((el) => el.id === todoListId)[0];
-  const todoItem = items.filter((el) => el.id === itemId)[0];
-  todoItem.conclusionDate = todoItem.conclusionDate ? null : new Date();
-  saveDb(db);
+export const updateTodoListItem = async (todoListId, itemId) => {
+  const res = await axios.put(`app/task/${itemId}/`, null, { withCredentials: true });
+  return res.status === 200;
 };
 
-export const deleteTodoListItem = (todoListId, itemId) => {
-  const db = getParsedDb();
-  const { items } = db.todoLists.filter((el) => el.id === todoListId)[0];
-  const todoItem = items.filter((el) => el.id === itemId)[0];
-  items.splice(items.indexOf(todoItem));
-  saveDb(db);
+export const deleteTodoListItem = async (todoListId, itemId) => {
+  const res = await axios.delete(`/app/task/${itemId}/`, { withCredentials: true });
+  return res.status === 200;
 };
 
-export const createTodoItem = (todoListId, todoItem) => {
-  const db = getParsedDb();
-  const { items } = db.todoLists.filter((el) => el.id === todoListId)[0];
-  items.push({
-    ...todoItem,
-    id: items.length + 1,
-  });
-  saveDb(db);
+export const createTodoItem = async (todoListId, todoItem) => {
+  const bodyFormData = new FormData();
+  bodyFormData.append('name', todoItem.name);
+  bodyFormData.append('description', todoItem.desc);
+  bodyFormData.append('status', 'T');
+  bodyFormData.append('priority', 1);
+  bodyFormData.append('dueDate', todoItem?.dueDate);
+  // bodyFormData.append('creation', (new Date()).toISOString().split('T')[0]);
+  const res = await axios.post(`/app/task/${todoListId}/`, bodyFormData, { withCredentials: true });
+  return res.status === 200;
+};
+
+export const deleteTodoList = async (todoListId) => {
+  const res = await axios.delete(`/app/list/${todoListId}/`, { withCredentials: true });
+  return res.status === 200;
 };
 
 export default {
@@ -78,4 +73,5 @@ export default {
   deleteTodoListItem,
   updateTodoListItem,
   createTodoItem,
+  deleteTodoList,
 };

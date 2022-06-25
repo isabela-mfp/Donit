@@ -11,7 +11,7 @@ export const isDateInPast = (dateString) => {
 };
 
 export const isPasswordValid = (password) => {
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
   return password.match(re) != null;
 };
 

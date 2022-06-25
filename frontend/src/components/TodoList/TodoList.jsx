@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Box, Button, Divider, Fade, TextField, List, ListSubheader, Modal, makeStyles, Typography,
+  Grid,
 } from '@material-ui/core';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import TodoListItem from '../TodoListItem/TodoListItem';
@@ -14,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: 200,
     },
   },
   modal: {
@@ -44,8 +44,12 @@ function TodoList({ todoListId }) {
   const classes = useStyles();
 
   const loadItems = async () => {
-    const todoList = await getTodoListItems(todoListId);
-    setTodoListState(todoList);
+    if (todoListId != null) {
+      const todoList = await getTodoListItems(todoListId);
+      setTodoListState(todoList);
+    } else {
+      setTodoListState(null);
+    }
   };
   useEffect(() => {
     loadItems();
@@ -61,7 +65,7 @@ function TodoList({ todoListId }) {
     loadItems();
   };
 
-  const addTodoItem = (ev) => {
+  const addTodoItem = async (ev) => {
     ev.preventDefault();
     const name = ev.target.name.value;
     const desc = ev.target.desc.value;
@@ -69,9 +73,11 @@ function TodoList({ todoListId }) {
     const todoItem = {
       name, desc, dueDate,
     };
-    createTodoItem(todoListId, todoItem);
-    setOpenState(false);
-    loadItems();
+    const result = await createTodoItem(todoListId, todoItem);
+    if (result) {
+      setOpenState(false);
+      loadItems();
+    }
   };
 
   return (
@@ -125,30 +131,38 @@ function TodoList({ todoListId }) {
               Create new task
             </Typography>
             <form noValidate autoComplete="off" className={classes.root}>
-              <div>
-                <TextField id="standard-basic" label="Task name" name="name" inputProps={{ maxLength: 15 }} />
-                <TextField
-                  id="date"
-                  label="Due date"
-                  type="date"
-                  name="dueDate"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </div>
-              <div className="form-last-row">
-                <TextField
-                  id="standard-multiline-static"
-                  label="Description"
-                  name="desc"
-                  multiline
-                  rows={4}
-                />
-                <Button variant="contained" color="secondary" type="submit">
-                  Submit task
-                </Button>
-              </div>
+              <Grid container rowSpacing={2} fullWidth>
+                <Grid item xs={12} fullWidth>
+                  <TextField id="standard-basic" label="Task name" name="name" inputProps={{ maxLength: 15 }} fullWidth />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="date"
+                    label="Due date"
+                    type="date"
+                    name="dueDate"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="standard-multiline-static"
+                    label="Description"
+                    name="desc"
+                    multiline
+                    rows={4}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} style={{ marginTop: 20 }}>
+                  <Button variant="contained" color="secondary" type="submit">
+                    Submit task
+                  </Button>
+                </Grid>
+              </Grid>
             </form>
           </div>
         </Fade>
