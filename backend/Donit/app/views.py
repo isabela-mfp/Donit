@@ -58,14 +58,33 @@ def new_list(request):
 @csrf_exempt
 def new_task(request, list_id):
     if request.method == 'POST':
-        if len(request.POST['name']) > 500 or len(request.POST['description']) > 500:
-            return JsonResponse({'function': 'new_task', 'result': 'fail'}, status=405)
         #if len(request.POST['status']) > 2 or request.POST['status'] not in ['D', 'T']:
         #    return HttpResponse('Erro ao adicionar tarefa!')
+        try:
+            name = request.POST['name']
+            description = request.POST['description']
+            creation = request.POST['creation']
+            conclusion = request.POST['conclusion']
+            priority = request.POST['priority']
+            status = request.POST['status']
+            if len(request.POST['name']) > 500 or len(request.POST['description']) > 500:
+                raise MultiValueDictKeyError()
+        except MultiValueDictKeyError as e:
+            return JsonResponse({'function': 'new_task', 'result': 'fail'}, status=405)
 
+        my_task = TaskManagement(
+            name=name,
+            description=description,
+            creation=creation,
+            conclusion=conclusion,
+            priority=priority,
+            status=status
+        )
 
-        my_task = TaskManagement(name=request.POST['name'], description=request.POST['description'], conclusion=request.POST['conclusion'], priority=request.POST['priority'], status=request.POST['status'])
-        #my_task.save()
+        try:
+            my_task.save()
+        except Exception as e:
+            return JsonResponse({'function': 'new_task', 'result': str(e)}, status=405)
         return JsonResponse({'function': 'new_task', 'result': 'success'}, status=200)
     else:
         return JsonResponse({'function': 'new_task', 'result': 'method_not_allowed'}, status=405)
