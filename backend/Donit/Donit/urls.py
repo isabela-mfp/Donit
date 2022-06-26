@@ -19,19 +19,6 @@ from django.urls import path, re_path
 from app import views
 
 
-'''
-TODO: Old Pattern, delete after complete refactoring process
-    re_path(r'^$', views.home_page, name='index'),
-    re_path(r'^$', views.home_page, name='index'),
-    re_path(r'^login$', views.login_function, name='login_function'),
-    re_path(r'^register$',  views.registration, name='registration'),
-    re_path(r'^logout$',  views.logout_function, name='logout_function'),
-    re_path(r'^app/new_list$', views.new_list, name='new_list'),
-    re_path(r'^app/del_list/(\d+)$', views.del_list, name='del_list'),
-    re_path(r'^app/(\d+)/new_task$', views.new_task, name='new_task'),
-    re_path(r'^app/(\d+)/del_task$', views.del_task, name='del_task'),
-'''
-
 urlpatterns = [
 
     path('app/list', views.list_controller, name='list_controller_no_id'),
