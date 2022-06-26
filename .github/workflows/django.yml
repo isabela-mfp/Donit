@@ -88,6 +88,7 @@ jobs:
         cache: 'npm'
         cache-dependency-path: frontend/package-lock.json
     - name: Clear previous executions
+      continue-on-error: true
       run: |
         rm -r backend/Donit/app/migrations/* backend/Donit/db.sqlite3 
     - name: Execute Backend
