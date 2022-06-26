@@ -107,7 +107,7 @@ jobs:
     - name: Wait for frontend
       uses: nev7n/wait_for_response@v1
       with:
-        url: 'http://127.0.0.1:3000/'
+        url: 'http://localhost:3000/'
         responseCode: 200
         timeout: 120000
         interval: 1000
