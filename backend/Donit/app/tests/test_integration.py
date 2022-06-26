@@ -30,3 +30,14 @@ class TestDataBaseIntegration(TransactionTestCase):
         lists_response = c.get('/app/list', HTTP_ACCEPT='application/json')
         self.assertEqual(lists_response.json()[0]['fields']['name'], 'ListaTeste001')
         self.assertEqual(lists_response.json()[0]['fields']['userid'], 2)
+
+    def test_register_logging_manipulate_list_loggout(self):
+        c = Client()
+        c.post('/register', {'username':'dummy1', 'email':'dummy@dummy1', 'password':'dummypass1'})
+        c.post('/register', {'username':'dummy2','email':'dummy@dummy2', 'password':'dummypass2'})
+        c.post('/login', {'username':'dummy2', 'password':'dummypass2'})
+        c.post('/app/list',{'name':'ListaTeste001', 'description':'description test example','type':'1'})
+        lists_response = c.get('/app/list', HTTP_ACCEPT='application/json')
+        c.post('/logout')
+        self.assertEqual(lists_response.json()[0]['fields']['name'], 'ListaTeste001')
+        self.assertEqual(lists_response.json()[0]['fields']['userid'], 2)
