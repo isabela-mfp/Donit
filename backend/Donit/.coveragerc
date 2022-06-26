@@ -1,0 +1,9 @@
+[run]
+branch = True
+source = .
+omit =
+ */Donit/asgi.py
+ */Donit/wsgi.py
+ */venv/*
+ */tests/*
+  manage.py
