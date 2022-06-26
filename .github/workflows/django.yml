@@ -31,10 +31,14 @@ jobs:
         cd backend/Donit
         coverage run manage.py test
         coverage report
-        
+        coverage xml
+    
     - name: Upload to codecov
       uses: codecov/codecov-action@v3.1.0
-  
+      with:
+        name: coverage.xml # Artifact name        
+        path: Donit/backend/Donit # Directory containing files to upload
+
   frontend_quality:
 
     runs-on: ubuntu-latest
