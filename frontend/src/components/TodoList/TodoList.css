@@ -14,3 +14,14 @@
     align-items: flex-end;
     justify-content: space-between;
 }
+
+.modal {
+    display: 'flex';
+    align-items: 'center';
+    justify-content: 'center';
+}
+.modalTitle {
+    display: 'flex';
+    align-items: 'center';
+    justify-content: 'center';
+}

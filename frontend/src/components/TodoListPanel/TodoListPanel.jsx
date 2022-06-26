@@ -1,94 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import {
   Card, Drawer, IconButton, Divider, Modal, Fade, TextField, Button, Box,
-  AppBar, Toolbar, Typography, makeStyles, List, ListItem, ListItemText, Grid, Select, MenuItem,
-} from '@material-ui/core';
-import clsx from 'clsx';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import DeleteIcon from '@material-ui/icons/Delete';
+  AppBar, Toolbar, Typography, List, ListItem, ListItemText, Grid, Select, MenuItem,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import DeleteIcon from '@mui/icons-material/Delete';
 import TodoList from '../TodoList/TodoList';
 import useAuth from '../../hooks/useAuth';
 
 import { createTodoList, getAllTodoLists, deleteTodoList } from '../../services/todoList';
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'space-between',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 
 function TodoListPanel() {
-  const classes = useStyles();
   const [todoListState, setTodoListState] = useState(null);
   const [open, setOpen] = useState(true);
   const [openState, setOpenState] = useState(false);
@@ -144,9 +84,6 @@ function TodoListPanel() {
     <div>
       <AppBar
         position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
       >
         <Toolbar>
           <IconButton
@@ -154,13 +91,12 @@ function TodoListPanel() {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
             <DoneAllIcon />
-            Donit
+            <span id="page__title">Donit</span>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -168,12 +104,8 @@ function TodoListPanel() {
         variant="persistent"
         anchor="left"
         open={open}
-        className={classes.drawer}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
       >
-        <div className={classes.drawerHeader}>
+        <div>
           <IconButton onClick={logout}>
             <ExitToAppIcon />
           </IconButton>
@@ -185,7 +117,12 @@ function TodoListPanel() {
         <List component="nav" aria-label="secondary mailbox folders">
           {
             todoListState && todoListState.map((item) => (
-              <ListItem button key={item.id} onClick={() => loadTodoList(item.id)}>
+              <ListItem
+                button
+                key={item.id}
+                onClick={() => loadTodoList(item.id)}
+                data-listname={item.name}
+              >
                 <ListItemText primary={item.name} />
                 <IconButton edge="end" aria-label="delete" onClick={(ev) => callDeleteTodoList(ev, item.id)} data-testid="DeleteButton">
                   <DeleteIcon />
@@ -202,16 +139,13 @@ function TodoListPanel() {
             fullWidth
             endIcon={<LibraryAddIcon />}
             onClick={() => setOpenState(true)}
+            id="create_new_list__btn"
           >
             Create new list
           </Button>
         </Box>
       </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
+      <main style={{ paddingTop: 70 }}>
         <Card data-testid="TodoListPanel">
           <TodoList todoListId={selectedTodoList} />
         </Card>
@@ -219,7 +153,7 @@ function TodoListPanel() {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={openState}
-          className={classes.modal}
+          className="modal"
           onClose={() => setOpenState(false)}
           closeAfterTransition
           BackdropProps={{
@@ -227,11 +161,11 @@ function TodoListPanel() {
           }}
         >
           <Fade in={openState}>
-            <div className={classes.paper}>
-              <Typography variant="h4" gutterBottom className={classes.modalTitle}>
+            <Box sx={style}>
+              <Typography variant="h4" gutterBottom className="modalTitle">
                 Create new list
               </Typography>
-              <form noValidate autoComplete="off" className={classes.root} onSubmit={save}>
+              <form noValidate autoComplete="off" onSubmit={save}>
                 <Grid container rowSpacing={2} fullWidth>
                   <Grid item xs={12} fullWidth>
                     <TextField id="standard-basic" label="List name" fullWidth name="name" inputProps={{ maxLength: 15 }} />
@@ -248,8 +182,8 @@ function TodoListPanel() {
                   </Grid>
                   <Grid item xs={12}>
                     <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      labelId="select_list_type-label"
+                      id="select_list_type"
                       value={type}
                       label="Tipo"
                       onChange={handleChange}
@@ -264,13 +198,13 @@ function TodoListPanel() {
                     </Select>
                   </Grid>
                   <Grid item xs={12} fullWidth style={{ marginTop: 10 }}>
-                    <Button variant="contained" color="secondary" type="submit">
+                    <Button variant="contained" color="secondary" type="submit" id="create_todolist__btn">
                       Submit todo list
                     </Button>
                   </Grid>
                 </Grid>
               </form>
-            </div>
+            </Box>
           </Fade>
         </Modal>
       </main>

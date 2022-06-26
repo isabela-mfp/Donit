@@ -9,6 +9,7 @@ describe('<TodoListItem />', () => {
     const todoItem = {
       name: 'todo text',
       conclusionDate: null,
+      dueDate: moment().subtract(20, 'days').toDate().toISOString(),
     };
 
     const update = jest.fn();
@@ -27,6 +28,7 @@ describe('<TodoListItem />', () => {
     const todoItem = {
       name: 'todo text',
       conclusionDate: null,
+      dueDate: moment().subtract(20, 'days').toDate().toISOString(),
     };
 
     const update = jest.fn();
@@ -47,6 +49,7 @@ describe('<TodoListItem />', () => {
     const todoItem = {
       name: 'todo text',
       conclusionDate: null,
+      dueDate: moment().subtract(20, 'days').toDate().toISOString(),
     };
 
     const deleteHandler = jest.fn();
@@ -67,6 +70,7 @@ describe('<TodoListItem />', () => {
     const todoItem = {
       name: 'todo text',
       conclusionDate: new Date(),
+      dueDate: moment().subtract(20, 'days').toDate().toISOString(),
     };
 
     const update = jest.fn();
@@ -84,7 +88,7 @@ describe('<TodoListItem />', () => {
   test('it should render late badge when dueDate is in past and item is not done', () => {
     const todoItem = {
       name: 'todo text',
-      dueDate: moment().subtract(20, 'days').toDate(),
+      dueDate: moment().subtract(20, 'days').toDate().toISOString(),
       conclusionDate: null,
     };
 
