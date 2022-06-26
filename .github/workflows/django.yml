@@ -60,10 +60,62 @@ jobs:
     - name: Install Dependencies
       run: |
         cd frontend
-        npm ci
+        npm i
     - name: Run Quality Script
       run: |
         cd frontend
         npm run quality
     - name: Codecov
       uses: codecov/codecov-action@v3.1.0
+
+  e2e_tests:
+
+    runs-on: ubuntu-latest
+    needs: frontend_quality
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [ 3.8 ]
+        node-version: [16.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    - name: Clear previous executions
+      continue-on-error: true
+      run: |
+        rm -r backend/Donit/app/migrations/* backend/Donit/db.sqlite3 
+    - name: Execute Backend
+      run: |
+        pip install --upgrade pip
+        cd backend/Donit
+        pip install -r requirements.txt
+        python manage.py makemigrations app
+        python manage.py migrate
+        python manage.py runserver &
+    - name: Execute Frontend
+      run: |
+        cd frontend
+        npm i
+        npm start &
+    - name: Wait for frontend
+      uses: nev7n/wait_for_response@v1
+      with:
+        url: 'http://localhost:3000/'
+        responseCode: 200
+        timeout: 120000
+        interval: 1000
+    - name: Run tests
+      run: |
+        cd frontend
+        npm run test:e2e -- --coverage

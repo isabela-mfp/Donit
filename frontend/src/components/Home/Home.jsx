@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  Card, CardContent, makeStyles,
-} from '@material-ui/core';
+  Card, CardContent,
+} from '@mui/material';
 import {
   Routes,
   Route,
@@ -10,17 +10,9 @@ import icon from '../../icon.png';
 
 import RegisterForm from '../RegisterForm/RegisterForm';
 import LoginForm from '../LoginForm/LoginForm';
-
-const useStyles = makeStyles(() => ({
-  logo: {
-    fontSize: '1.7em',
-    fontWeight: 600,
-  },
-}));
+import './Home.css';
 
 function Home() {
-  const classes = useStyles();
-
   return (
     <Card className="App-body">
       <div className="full-width row wrap justify-center items-center content-center">
@@ -29,7 +21,7 @@ function Home() {
           <img src={icon} className="App-logo" alt="logo" />
         </div>
         <p>
-          <span className={classes.logo}>Donit</span>
+          <span className="logo">Donit</span>
           <br />
           Um novo jeito de se organizar
         </p>
