@@ -1,6 +1,23 @@
 # Donit
 Trabalho Prático da disciplina de Teste de Software
 
+### Usage/Routes:
+* **List**:
+    * `GET` a list by id: `app/list/<list id>`
+    * `GET` lists by user: `app/list/`
+    * `POST` create list: `app/list`
+    * `DELETE` a list by id: `app/list/<list id>/`
+
+* **Task**:
+    * `GET` tasks by list: `app/task/<list id>`
+    * `POST` create task: `app/task`
+    * `DELETE` a task by id:`app/task/<task id>/`
+
+* **User**:
+    * `/login`
+    * `/register`
+    * `/logout`
+
 ### Stack
 * Framework: Django
 * Database: MySQL
