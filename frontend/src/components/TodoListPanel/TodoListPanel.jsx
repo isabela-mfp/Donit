@@ -117,7 +117,12 @@ function TodoListPanel() {
         <List component="nav" aria-label="secondary mailbox folders">
           {
             todoListState && todoListState.map((item) => (
-              <ListItem button key={item.id} onClick={() => loadTodoList(item.id)}>
+              <ListItem
+                button
+                key={item.id}
+                onClick={() => loadTodoList(item.id)}
+                data-listname={item.name}
+              >
                 <ListItemText primary={item.name} />
                 <IconButton edge="end" aria-label="delete" onClick={(ev) => callDeleteTodoList(ev, item.id)} data-testid="DeleteButton">
                   <DeleteIcon />
@@ -134,6 +139,7 @@ function TodoListPanel() {
             fullWidth
             endIcon={<LibraryAddIcon />}
             onClick={() => setOpenState(true)}
+            id="create_new_list__btn"
           >
             Create new list
           </Button>
@@ -176,8 +182,8 @@ function TodoListPanel() {
                   </Grid>
                   <Grid item xs={12}>
                     <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      labelId="select_list_type-label"
+                      id="select_list_type"
                       value={type}
                       label="Tipo"
                       onChange={handleChange}
@@ -192,7 +198,7 @@ function TodoListPanel() {
                     </Select>
                   </Grid>
                   <Grid item xs={12} fullWidth style={{ marginTop: 10 }}>
-                    <Button variant="contained" color="secondary" type="submit">
+                    <Button variant="contained" color="secondary" type="submit" id="create_todolist__btn">
                       Submit todo list
                     </Button>
                   </Grid>

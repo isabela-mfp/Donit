@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 
-jest.setTimeout(30000);
+jest.setTimeout(10000);
 
 describe('Registration and login flow', () => {
   let browser;
@@ -14,7 +14,7 @@ describe('Registration and login flow', () => {
   });
 
   it('should register a new user', async () => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://127.0.0.1:3000');
     await page.waitForSelector('#register__btn');
     await page.click('#register__btn');
     await page.waitForSelector('[data-testid="RegisterForm"]');
@@ -41,7 +41,7 @@ describe('Registration and login flow', () => {
 
   describe('Login after registering a user', () => {
     it('it should login with new created user', async () => {
-      await page.goto('http://localhost:3000');
+      await page.goto('http://127.0.0.1:3000');
       await page.waitForSelector('#register__btn');
 
       await page.click('input[name=username]');
@@ -55,6 +55,45 @@ describe('Registration and login flow', () => {
 
       const text = await page.$eval('#page__title', (e) => e.textContent);
       expect(text).toContain('Donit');
+    });
+  });
+
+  describe('Test list actions with valid user', () => {
+    it('it should create a new list', async () => {
+      await page.goto('http://127.0.0.1:3000');
+      await page.waitForSelector('#register__btn');
+
+      await page.click('input[name=username]');
+      await page.type('input[name=username]', username);
+
+      await page.click('input[name=password]');
+      await page.type('input[name=password]', password);
+
+      await page.click('#login__btn');
+      await page.waitForSelector('#page__title');
+
+      const text = await page.$eval('#page__title', (e) => e.textContent);
+      expect(text).toContain('Donit');
+
+      await page.click('#create_new_list__btn');
+
+      const listName = 'TodoListName';
+      await page.click('input[name=name]');
+      await page.type('input[name=name]', listName);
+
+      await page.click('textarea[name=desc]');
+      await page.type('textarea[name=desc]', 'TodoList Description');
+
+      await page.click('#select_list_type');
+      await page.waitForSelector('li[data-value=N]');
+      await page.click('li[data-value=N]');
+
+      await page.$eval('#create_todolist__btn', (element) => element.click());
+
+      await page.waitForSelector(`[data-listname="${listName}"]`);
+
+      const newFoundList = await page.$eval(`[data-listname="${listName}"]`, (e) => e.textContent);
+      expect(newFoundList).toContain(listName);
     });
   });
 
