@@ -10,13 +10,13 @@ Trabalho Prático da disciplina de Teste de Software
 
 * **Task**:
     * `GET` tasks by list: `app/task/<list id>`
-    * `POST` create task: `app/task`
+    * `POST` create task: `app/task/<list id>/`
     * `DELETE` a task by id:`app/task/<task id>/`
 
 * **User**:
-    * `/login`
-    * `/register`
-    * `/logout`
+    * `POST` -> `/login`
+    * `POST` -> `/register`
+    * `POST` -> `/logout`
 
 ### Stack
 * Framework: Django
